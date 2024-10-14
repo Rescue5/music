@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Извините, заголовок потерян, мы скоро все исправим!{% endblock title %}</title>
+    <link rel="stylesheet" href="{% block stylesheet %}{{ url_for("static", filename='CSS/base_unlogged_stylesheet.css') }}{% endblock stylesheet %}">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">LOGO</a>
+        <nav>
+            <ul class="menu">
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Технологии</a>
+                    <ul>
+                        <li><a href="#">Технология 1</a></li>
+                        <li><a href="#">Технология 2</a></li>
+                        <li><a href="#">Технология 3</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Оставить отзыв</a></li>
+            </ul>
+        </nav>
+        <nav class="auhtorisation">
+            <ul>
+                <li><a href="#">Войти</a></li>
+                <li><a href="#">Регистрация</a></li>
+            </ul>
+        </nav>
+
+    </header>
+    <main>
+        {% block content %}
+            Извините, содержимое страницы не найдено, мы скоро все исправим!
+        {% endblock content %}
+    </main>
+</body>
+</html>

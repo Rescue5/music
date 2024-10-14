@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Извините, заголовок потерян, мы скоро все исправим!{% endblock title %}</title>
+    <link rel="stylesheet" href="{% block stylesheet %}{{ url_for("static", filename='CSS/base_unlogged_stylesheet.sass/base_unlogged_stylesheet.css') }}{% endblock stylesheet %}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="#" class="logo">Медиатека</a>
+                <ul class="nav-links">
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#">Плейлисты</a></li>
+                    <li><a href="#">Добавить трек</a></li>
+                    <li><a href="#">Вход</a></li>
+                    <li><a href="#">Регистрация</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="hero">
+            <h1>Добро пожаловать в Медиатеку</h1>
+            <p>Откройте мир музыки и песен!</p>
+            <a href="#" class="button">Начать</a>
+        </div>
+    </header>
+    <main>
+        <section class="features">
+            <h2>Наши возможности:</h2>
+            <ul>
+                <li>Создавайте собственные плейлисты</li>
+                <li>Ищите новые песни</li>
+                <li>Добавляйте свои треки</li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Медиатека. Все права защищены.</p>
+    </footer>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
