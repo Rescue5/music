@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Извините, заголовок потерян, мы скоро все исправим!{% endblock title %}</title>
-    <link rel="stylesheet" href="{% block stylesheet %}{{ url_for("static", filename='CSS/base_unlogged_stylesheet.css') }}{% endblock stylesheet %}">
+    <link rel="stylesheet" href="{% block stylesheet %}{{ url_for("static", filename='CSS/base_header_stylesheet.css') }}{% endblock stylesheet %}">
 </head>
 <body>
     <header>
-        <a href="/" class="logo">LOGO</a>
+        <a href="/static" class="logo">LOGO</a>
         <nav>
             <ul class="menu">
                 <li><a href="#">О нас</a></li>

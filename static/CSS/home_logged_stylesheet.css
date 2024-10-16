@@ -7,6 +7,9 @@
   text-decoration: none;
 }
 
+body {
+  padding-top: 40px;
+}
 body header {
   background-color: white;
   position: fixed;
@@ -43,4 +46,18 @@ body header nav ul li a:hover {
   color: white;
 }
 
-/*# sourceMappingURL=base_unlogged_stylesheet.css.map */
+.authenticated-content {
+  padding: 20px;
+  background-color: #e8f5e9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+.authenticated-content h2 {
+  color: #2e7d32;
+}
+.authenticated-content p {
+  color: #388e3c;
+}
+
+/*# sourceMappingURL=home_logged_stylesheet.css.map */

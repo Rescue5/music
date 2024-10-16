@@ -1,0 +1,14 @@
+{% extends 'base/base_logged.html' %}
+
+{% block title %}Медиатека{% endblock title %}
+
+{% block stylesheet %}
+    {{ url_for("static", filename='CSS/home_logged_stylesheet.css') }}
+{% endblock stylesheet %}
+
+{% block content %}
+<div class="authenticated-content">
+    <h2>Добро пожаловать, {{ current_user.user.login }}!</h2>
+    <p>Это ваш персональный контент, доступный только для зарегистрированных пользователей.</p>
+</div>
+{% endblock content %}

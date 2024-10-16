@@ -1,1 +1,14 @@
-{% extends 'base_unlogged.html' %}
+{% extends 'base/base_unlogged.html' %}
+
+{% block title %}Медиатека{% endblock title %}
+
+{% block stylesheet %}
+    {{ url_for("static", filename='CSS/home_unlogged_stylesheet.css') }}
+{% endblock stylesheet %}
+
+{% block content %}
+<div class="unauthenticated-content">
+    <h2>Добро пожаловать!</h2>
+    <p>Пожалуйста, <a href="{{ url_for('login') }}">войдите</a> или <a href="{{ url_for('register') }}">зарегистрируйтесь</a>, чтобы получить доступ к дополнительным возможностям.</p>
+</div>
+{% endblock content %}
