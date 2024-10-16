@@ -68,4 +68,13 @@ div form .invalid-feedback {
   margin-top: -5px;
 }
 
+.warning {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border-left: 4px solid #e74c3c;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
 /*# sourceMappingURL=registration.css.map */

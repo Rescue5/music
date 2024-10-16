@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, TIMESTAMP
 from sqlalchemy.exc import SQLAlchemyError
@@ -21,10 +23,17 @@ class FDataBase:
 
     def register_new_users(self, login, password, email):
         try:
-            existing_users = self.__db_session.Users.query.filter_by(login=login).first()
+            existing_users = Users.query.filter_by(login=login).first()
             if existing_users:
+                flash(f"Пользователь с логином: {login}, уже существует.", category="warning")
                 print(f"Пользователь с логином: {login}, уже существует.")
                 return None
+            existing_emails = Users.query.filter_by(email=email).first()
+            if existing_emails:
+                flash(f"Email адрес {email} уже зарегистрирован", category="warning")
+                print(f"Email адрес {email} уже зарегистрирован")
+                return None
+
 
             hashed_pass = generate_password_hash(password)
             new_user = Users(login=login, password=hashed_pass, email=email)
@@ -44,7 +53,7 @@ class FDataBase:
 class Users(db.Model):
     __tablename__ = 'users'  # Опционально: задает имя таблицы в БД
 
-    user_pk = Column(Integer, primary_key=True)
+    user_pk = Column(Integer(), primary_key=True, autoincrement=True)
     login = Column(String(), unique=True, nullable=False)
     password = Column(String(), nullable=False)
     email = Column(String(), unique=True, nullable=False)

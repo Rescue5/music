@@ -29,16 +29,17 @@ def home():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        login = request.form['login']
-        password = request.form['password1']
-        email = request.form['email']
+        login = form.login.data
+        password = form.password.data
+        email = form.email.data
         res = fdb.register_new_users(login, password, email)
         if res:
             print("Пользователь успешно зарегистрирован")
-            flash("Регистрация успешна")
+            flash("Регистрация успешна, пожалуйста войдите в аккаунт")
             return redirect(url_for("login"))
         else:
-            flash("Ошибка при регистрации, проверьте введенные данные или попробуйте позже")
+            pass
+            # flash("Ошибка при регистрации, проверьте введенные данные или попробуйте позже")
     return render_template('registration.html', form=form)
 
 

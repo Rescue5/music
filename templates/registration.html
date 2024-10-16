@@ -7,9 +7,16 @@
 </head>
 <body>
 <header>
-    Регистрация
+    <div>
+        Регистрация
+    </div>
 </header>
 <div>
+    {% for ctg, message in get_flashed_messages(True) %}
+        <div class="{{ ctg }}">
+            {{ message }}
+        </div>
+    {% endfor %}
     <form action="" method="post">
         {{ form.hidden_tag() }}
         {% for field in form if field.name not in ['csrf_token', 'submit'] %}
@@ -29,9 +36,6 @@
         {{ form.submit() }}
     </form>
 </div>
-<footer>
-    Тут что-нибудь придумаем
-</footer>
 
 </body>
 </html>
