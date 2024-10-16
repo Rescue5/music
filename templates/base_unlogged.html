@@ -13,11 +13,11 @@
             <ul class="menu">
                 <li><a href="#">О нас</a></li>
                 <li><a href="#">Технологии</a>
-                    <ul>
-                        <li><a href="#">Технология 1</a></li>
-                        <li><a href="#">Технология 2</a></li>
-                        <li><a href="#">Технология 3</a></li>
-                    </ul>
+{#                    <ul>#}
+{#                        <li><a href="#">Технология 1</a></li>#}
+{#                        <li><a href="#">Технология 2</a></li>#}
+{#                        <li><a href="#">Технология 3</a></li>#}
+{#                    </ul>#}
                 </li>
                 <li><a href="#">Оставить отзыв</a></li>
             </ul>
@@ -25,7 +25,7 @@
         <nav class="auhtorisation">
             <ul>
                 <li><a href="#">Войти</a></li>
-                <li><a href="#">Регистрация</a></li>
+                <li><a href="{{ url_for("register") }}">Регистрация</a></li>
             </ul>
         </nav>
 

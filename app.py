@@ -1,17 +1,19 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash, url_for
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from DB_Models import Users, FDataBase
+from DB_Models import Users, FDataBase, db
+from forms import RegisterForm
 
 
 
 # Инициализируем приложение
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '30a469afa9bd791e087d03e29a68e57cbc6e1c9a'
 
 # инициализация базы данных
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:root@localhost/root'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db.init_app(app)
 fdb = FDataBase(db.session)
 
 # инициализация login manager
@@ -25,7 +27,21 @@ def home():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    pass
+    form = RegisterForm()
+    if form.validate_on_submit():
+        login = request.form['login']
+        password = request.form['password1']
+        email = request.form['email']
+        res = fdb.register_new_users(login, password, email)
+        if res:
+            print("Пользователь успешно зарегистрирован")
+            flash("Регистрация успешна")
+            return redirect(url_for("login"))
+        else:
+            flash("Ошибка при регистрации, проверьте введенные данные или попробуйте позже")
+    return render_template('registration.html', form=form)
+
+
 
 
 

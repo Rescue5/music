@@ -1,7 +1,10 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, SQ, Boolean, DateTime, TIMESTAMP
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, TIMESTAMP
 from sqlalchemy.exc import SQLAlchemyError
-from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
+
+db = SQLAlchemy()
 
 
 class FDataBase:
@@ -23,7 +26,8 @@ class FDataBase:
                 print(f"Пользователь с логином: {login}, уже существует.")
                 return None
 
-            new_user = Users(login=login, password=password, email=email)
+            hashed_pass = generate_password_hash(password)
+            new_user = Users(login=login, password=hashed_pass, email=email)
 
             self.__db_session.add(new_user)
             self.__db_session.flush()
@@ -38,12 +42,14 @@ class FDataBase:
 
 
 class Users(db.Model):
-    user_pk = db.column(db.Integer, primary_key=True)
-    login = db.column(db.String(), unique=True, nullable=False)
-    password = db.column(db.String(), nullable=False)
-    email = db.column(db.String(), unique=True, nullable=False)
-    email_confirm = db.column(db.Boolean(), default=False, nullable=False)
-    reg_time = db.column(db.TimeStamp(), nullable=False, default=datetime.now())
+    __tablename__ = 'users'  # Опционально: задает имя таблицы в БД
+
+    user_pk = Column(Integer, primary_key=True)
+    login = Column(String(), unique=True, nullable=False)
+    password = Column(String(), nullable=False)
+    email = Column(String(), unique=True, nullable=False)
+    email_confirm = Column(Boolean(), default=False, nullable=False)
+    reg_time = Column(TIMESTAMP(), nullable=False, default=datetime.now())
 
     def to_dict(self):
         return {

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for("static", filename='CSS/registration.css') }}">
+</head>
+<body>
+<header>
+    Регистрация
+</header>
+<div>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ['csrf_token', 'submit'] %}
+        {{ field.label() }}
+        {% if field.errors %}
+            {{ field(class="invalid") }}
+        <span class="invalid-feedback">
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </span>
+        {% else %}
+            {{ field() }}
+        {% endif %}
+        {% endfor %}
+        {{ form.submit.label() }}
+        {{ form.submit() }}
+    </form>
+</div>
+<footer>
+    Тут что-нибудь придумаем
+</footer>
+
+</body>
+</html>
