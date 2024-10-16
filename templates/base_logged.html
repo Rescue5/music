@@ -7,38 +7,26 @@
     <link rel="stylesheet" href="{% block stylesheet %}{{ url_for("static", filename='CSS/base_unlogged_stylesheet.sass/base_unlogged_stylesheet.css') }}{% endblock stylesheet %}">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="container">
-                <a href="#" class="logo">Медиатека</a>
-                <ul class="nav-links">
-                    <li><a href="#">Главная</a></li>
-                    <li><a href="#">Плейлисты</a></li>
-                    <li><a href="#">Добавить трек</a></li>
-                    <li><a href="#">Вход</a></li>
-                    <li><a href="{{ url_for("register") }}">Регистрация</a></li>
-                </ul>
-            </div>
-        </nav>
-        <div class="hero">
-            <h1>Добро пожаловать в Медиатеку</h1>
-            <p>Откройте мир музыки и песен!</p>
-            <a href="#" class="button">Начать</a>
-        </div>
-    </header>
-    <main>
-        <section class="features">
-            <h2>Наши возможности:</h2>
-            <ul>
-                <li>Создавайте собственные плейлисты</li>
-                <li>Ищите новые песни</li>
-                <li>Добавляйте свои треки</li>
+<header>
+        <a href="/" class="logo">LOGO</a>
+        <nav>
+            <ul class="menu">
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Технологии</a></li>
+                <li><a href="#">Оставить отзыв</a></li>
             </ul>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 Медиатека. Все права защищены.</p>
-    </footer>
+        </nav>
+        <nav class="auhtorisation">
+            <ul>
+                <li><a href="{{ url_for("profile") }}">Профиль</a></li>
+                <li><a href="{{ url_for("logout") }}">Выйти</a></li>
+            </ul>
+        </nav>
+    </header>
+<main class="content">
+    {% block content %}
+    {% endblock content %}
+</main>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
