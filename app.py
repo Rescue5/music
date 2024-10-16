@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from DB_Models import Users, FDataBase
+
 
 
 # Инициализируем приложение
@@ -10,8 +12,10 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:root@localhost/root'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+fdb = FDataBase(db.session)
 
 # инициализация login manager
+
 
 
 @app.route('/')
