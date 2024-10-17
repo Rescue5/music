@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, flash, url_for, request
 from flask_login import LoginManager, current_user
+from sqlalchemy.testing.pickleable import User
 
 from DB_Models import FDataBase, db
 from forms import RegisterForm, LoginForm
@@ -52,9 +53,6 @@ def register():
             print("Пользователь успешно зарегистрирован")
             flash("Регистрация успешна, пожалуйста войдите в аккаунт")
             return redirect(url_for("login"))
-        else:
-            pass
-            # flash("Ошибка при регистрации, проверьте введенные данные или попробуйте позже")
     return render_template('registration.html', form=form)
 
 
@@ -76,10 +74,14 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route('/profile')
+@app.route('/profile/<int:user_id>')
 @login_required
-def profile():
-    return 'profile'
+def profile(user_id):
+    user, user_info = fdb.get_profile_info(user_id)
+    if current_user.get_id() == str(user_id):
+        return render_template("my_profile.html", user=user, user_info=user_info)
+    else:
+        return render_template("not_my_profile.html", user=user, user_info=user_info)
 
 
 @app.route('/logout')

@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import flash
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, ForeignKey
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -34,10 +34,13 @@ class FDataBase:
                 return False
 
             hashed_pass = generate_password_hash(password)
-            new_user = Users(login=login, password=hashed_pass, email=email)
 
+            new_user = Users(login=login, password=hashed_pass, email=email)
             self.__db_session.add(new_user)
-            self.__db_session.flush()
+            self.__db_session.commit()
+
+            new_user_info = UserInfo(user_fk=new_user.user_pk)
+            self.__db_session.add(new_user_info)
             self.__db_session.commit()
 
             print(f"Пользователь {login} успешно зарегистрирован")
@@ -47,7 +50,8 @@ class FDataBase:
             self.__db_session.rollback()
             return False
 
-    def authenticate(self, email, password):
+    @staticmethod
+    def authenticate(email, password):
         try:
             existing_users = Users.query.filter_by(email=email).first()
             if not existing_users:
@@ -63,7 +67,8 @@ class FDataBase:
             print("Ошибка обращения к бд при авторизации пользователя")
             return False
 
-    def get_user(self, user_pk):
+    @staticmethod
+    def get_user(user_pk):
         print(user_pk)
         try:
             user = Users.query.filter_by(user_pk=user_pk).first()
@@ -74,6 +79,21 @@ class FDataBase:
             return user
         except SQLAlchemyError as e:
             print(f"Ошибка при поиске пользователя в базе: {e}")
+
+    @staticmethod
+    def get_profile_info(user_id):
+        try:
+            user = Users.query.filter_by(user_pk=user_id).first()
+            if not user:
+                print("Пользователь не найден")
+                return False
+            user_info = UserInfo.query.filter_by(user_fk=user.user_pk).first()
+            if not user_info:
+                print("Информации о пользователе нет в БД")
+                return False
+            return user, user_info
+        except SQLAlchemyError as e:
+            print(f"Ошибка при поиске профиля или пользователя в БД: {e}")
 
 
 class Users(db.Model):
@@ -93,3 +113,14 @@ class Users(db.Model):
             'email': self.email,
             'email_confirm': self.email_confirm
         }
+
+
+class UserInfo(db.Model):
+    __tablename__ = 'user_info'
+
+    user_info_pk = Column(Integer(), primary_key=True, autoincrement=True)
+    user_fk = Column(ForeignKey('users.user_pk'), nullable=False)
+    age = Column(Integer())
+    avatar = Column(String(), nullable=False, default='image/default.png')
+    about_me = Column(String())
+    gender = Column(Integer())
