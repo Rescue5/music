@@ -5,6 +5,8 @@ import traceback
 from jwt import ExpiredSignatureError, InvalidTokenError
 from flask_restful import Api, Resource
 
+from flasgger import Swagger
+
 from models import db, FDataBase
 
 app = Flask(__name__)
@@ -15,10 +17,40 @@ db.init_app(app)
 fdb = FDataBase(db.session)
 
 api = Api(app)
+swagger = Swagger(app)
 
 
 class Register(Resource):
     def post(self):
+        """
+        Зарегистрировать нового пользователя
+        ---
+        parameters:
+          - name: login
+            in: formData
+            type: string
+            required: true
+            description: Логин пользователя
+          - name: password
+            in: formData
+            type: string
+            required: true
+            description: Пароль пользователя
+          - name: email
+            in: formData
+            type: string
+            required: true
+            description: Email пользователя
+        responses:
+          200:
+            description: Пользователь успешно зарегистрирован
+          409:
+            description: Email занят
+          401:
+            description: Ошибка регистрации пользователя
+          500:
+            description: Непредвиденная ошибка
+        """
         user_login = request.form.get('login')
         password = request.form.get('password')
         email = request.form.get('email')
@@ -38,6 +70,33 @@ class Register(Resource):
 
 class Login(Resource):
     def post(self):
+        """
+        Авторизовать пользователя
+        ---
+        parameters:
+          - name: email
+            in: formData
+            type: string
+            required: true
+            description: Email пользователя
+          - name: password
+            in: formData
+            type: string
+            required: true
+            description: Пароль пользователя
+          - name: remember_me
+            in: formData
+            type: boolean
+            required: false
+            description: Запомнить пользователя
+        responses:
+          200:
+            description: Токен успешно получен
+          400:
+            description: Email и пароль обязательны
+          401:
+            description: Неверная пара Email/пароль
+        """
         email = request.form.get('email')
         password = request.form.get('password')
         remember_me = request.form.get('remember_me')
@@ -61,6 +120,23 @@ class Login(Resource):
 
 class CheckAuth(Resource):
     def get(self):
+        """
+        Проверить авторизацию пользователя
+        ---
+        parameters:
+          - name: Authorization
+            in: header
+            type: string
+            required: true
+            description: Токен в формате "Bearer <token>"
+        responses:
+          200:
+            description: Пользователь авторизирован
+          401:
+            description: Токен не предоставлен или истек
+          500:
+            description: Непредвиденная ошибка
+        """
         auth_header = request.headers.get('Authorization')
         if not auth_header:
             return {"message": "Токен не предоставлен"}, 401
