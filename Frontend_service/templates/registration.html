@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for("static", filename='CSS/registration.css') }}">
+</head>
+<body>
+<header>
+        Регистрация
+</header>
+<div>
+    {% for ctg, message in get_flashed_messages(True) %}
+        <div class="{{ ctg }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <form id="registration-form" action="http://127.0.0.1:5001/register" method="post">
+{#        {{ form.hidden_tag() }}#}
+        {% for field in form.items() if field.name not in ['csrf_token', 'submit'] %}
+        {{ field.label() }}
+        {% if field.errors %}
+            {{ field(class="invalid") }}
+        <span class="invalid-feedback">
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </span>
+        {% else %}
+            {{ field() }}
+        {% endif %}
+        {% endfor %}
+        {{ form.submit.label() }}
+        {{ form.submit() }}
+    </form>
+</div>
+
+</body>
+</html>

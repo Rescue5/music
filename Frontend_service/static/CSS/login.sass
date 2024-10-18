@@ -1,0 +1,87 @@
+// Variables for colors and fonts
+$primary-color: #3498db
+$secondary-color: #2ecc71
+$error-color: #e74c3c
+$background-color: #f8f8f8
+$text-color: #333
+$font-family: 'Arial', sans-serif
+
+// Global Styles
+body
+  margin: 0
+  font-family: $font-family
+  background-color: $background-color
+  color: $text-color
+
+// Header styles
+header
+  background-color: $primary-color
+  color: white
+  padding: 20px
+  text-align: center
+  font-size: 24px
+  margin-bottom: 100px
+
+// Form container styles
+div
+  max-width: 400px
+  margin: 20px auto
+  padding: 20px
+  background-color: white
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1)
+  border-radius: 8px
+
+  // Styles for form elements
+  form
+    display: flex
+    flex-direction: column
+
+    // Input field styles
+    input[type="text"],
+    input[type="password"],
+    input[type="email"]
+      padding: 10px
+      margin: 10px 0
+      border: 1px solid #ccc
+      border-radius: 4px
+      transition: border-color 0.3s
+
+      &:focus
+        border-color: $primary-color
+        outline: none
+
+      &.invalid
+        border-color: $error-color
+
+    // Label styles
+    label
+      margin: 5px 0
+      font-weight: bold
+
+    // Submit button styles
+    input[type="submit"]
+      padding: 10px
+      background-color: $secondary-color
+      color: white
+      border: none
+      border-radius: 4px
+      cursor: pointer
+      transition: background-color 0.3s
+
+      &:hover
+        background-color: darken($secondary-color, 10%)
+
+    // Error message styles
+    .invalid-feedback
+      color: $error-color
+      font-size: 12px
+      margin-top: -5px
+
+// Styles for warning messages
+.warning
+  background-color: rgba($error-color, 0.1) // Мягкий красный цвет
+  color: $error-color
+  border-left: 4px solid $error-color
+  padding: 10px
+  margin-bottom: 20px
+  border-radius: 4px

@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+header {
+  background-color: #3498db;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 100px;
+}
+
+div {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+div form {
+  display: flex;
+  flex-direction: column;
+}
+div form input[type=text],
+div form input[type=password],
+div form input[type=email] {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+div form input[type=text]:focus,
+div form input[type=password]:focus,
+div form input[type=email]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+div form input[type=text].invalid,
+div form input[type=password].invalid,
+div form input[type=email].invalid {
+  border-color: #e74c3c;
+}
+div form label {
+  margin: 5px 0;
+  font-weight: bold;
+}
+div form input[type=submit] {
+  padding: 10px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+div form input[type=submit]:hover {
+  background-color: #25a25a;
+}
+div form .invalid-feedback {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: -5px;
+}
+
+.warning {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border-left: 4px solid #e74c3c;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+/*# sourceMappingURL=registration.css.map */

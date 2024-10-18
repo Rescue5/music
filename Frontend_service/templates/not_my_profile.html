@@ -1,0 +1,23 @@
+{% extends 'base/base_logged.html' %}
+
+{% block title %}Профиль пользователя {{ user.login }}{% endblock title %}
+
+{% block stylesheet %} {{ url_for("static", filename="CSS/base/base_header_stylesheet.css") }} {% endblock stylesheet %}
+
+{% block content %}
+
+    <div>Профиль пользователя {{ user.login }}</div>
+    <div><img src="{{ url_for("static", filename=user_info.avatar) }}" alt="#"></div>
+    <div>Email: {{ user.email }}</div>
+    {% if user_info.age %}
+    <div>Возраст: {{ user_info.age }}</div>
+    {% else %}
+    <div>Возраст: Не указан</div>
+    {% endif %}
+    {% if user_info.age %}
+    <div>Пол: {{ user_info.gender }}</div>
+    {% else %}
+    <div>Пол: Не указан</div>
+    {% endif %}
+
+{% endblock content %}
