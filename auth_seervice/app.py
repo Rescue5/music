@@ -1,13 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 import jwt
-import datetime
-import traceback
 from jwt import ExpiredSignatureError, InvalidTokenError
 from flask_restful import Api, Resource
-
 from flasgger import Swagger
 
+import datetime
+import traceback
+
 from models import db, FDataBase
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "daJsfohcub23rhqfcnqiu3dqobcqbbcq438fc"
@@ -21,7 +22,8 @@ swagger = Swagger(app)
 
 
 class Register(Resource):
-    def post(self):
+    @staticmethod
+    def post():
         """
         Зарегистрировать нового пользователя
         ---
@@ -69,7 +71,8 @@ class Register(Resource):
 
 
 class Login(Resource):
-    def post(self):
+    @staticmethod
+    def post():
         """
         Авторизовать пользователя
         ---
@@ -119,7 +122,8 @@ class Login(Resource):
 
 
 class CheckAuth(Resource):
-    def get(self):
+    @staticmethod
+    def get():
         """
         Проверить авторизацию пользователя
         ---
