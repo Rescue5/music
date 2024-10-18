@@ -20,19 +20,20 @@ class FDataBase:
             print(f"Ошибка при получении списка пользователей: {e}")
             return []
 
+    def check_unique_email(self, email):
+        try:
+            existing_user = Users.query.filter_by(email=email).first()
+            if existing_user:
+                return False
+            else:
+                return True
+        except SQLAlchemyError as e:
+            print(f"Возникла ошибка при поиске {email} в БД")
+            return False
+
+
     def register_new_users(self, login, password, email):
         try:
-            existing_users = Users.query.filter_by(login=login).first()
-            if existing_users:
-                flash(f"Пользователь с логином: {login}, уже существует.", category="warning")
-                print(f"Пользователь с логином: {login}, уже существует.")
-                return False
-            existing_emails = Users.query.filter_by(email=email).first()
-            if existing_emails:
-                flash(f"Email адрес {email} уже зарегистрирован", category="warning")
-                print(f"Email адрес {email} уже зарегистрирован")
-                return False
-
             hashed_pass = generate_password_hash(password)
 
             new_user = Users(login=login, password=hashed_pass, email=email)

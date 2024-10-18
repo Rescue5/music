@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 import jwt
 import datetime
-import json
-from forms import LoginForm, RegisterForm
+import traceback
+
+from sqlalchemy.testing.pickleable import User
+
 from models import db, FDataBase
 
 app = Flask(__name__)
@@ -10,21 +12,26 @@ app.config["SECRET_KEY"] = "daJsfohcub23rhqfcnqiu3dqobcqbbcq438fc"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:root@localhost/root'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
-fdb = FDataBase(db)
+fdb = FDataBase(db.session)
 
 
 @app.route('/register', methods=['POST'])
 def register():
-    form = RegisterForm(request.form)
-    if form.validate_on_submit():
-        login = form.login.data
-        password = form.password.data
-        email = form.email.data
-        if fdb.register_new_users(login, password, email):
-            return jsonify({'message': 'User registered successfully'}), 201
-        else:
-            return jsonify({'message': 'User registration failed'}), 400
-    return jsonify({'message': 'Invalid input'}), 400
+    login = request.form.get('login')
+    password = request.form.get('password')
+    email = request.form.get('email')
+    try:
+        email_not_exist = fdb.check_unique_email(email)
+        if not email_not_exist:
+            return jsonify({"message": "Email занят"}), 409
+        res = fdb.register_new_users(login, password, email)
+        if not res:
+            return jsonify({"message": "Ошибка регистрации пользователя"}), 401
+        return jsonify({"message": "Пользователь успешно зарегистрирован"}), 200
+    except Exception as e:
+        print(f"Ошибка при обработке запроса: {e}")
+        print(traceback.print_exc())
+        return jsonify({"message": f"Непредвиденная ошибка {e}"}), 500
 
 
 @app.route('/login', methods=['POST'])

@@ -15,9 +15,9 @@
             {{ message }}
         </div>
     {% endfor %}
-    <form id="registration-form" action="http://127.0.0.1:5001/register" method="post">
-{#        {{ form.hidden_tag() }}#}
-        {% for field in form.items() if field.name not in ['csrf_token', 'submit'] %}
+    <form id="registration-form" action="" method="post">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ['csrf_token', 'submit'] %}
         {{ field.label() }}
         {% if field.errors %}
             {{ field(class="invalid") }}
@@ -34,6 +34,5 @@
         {{ form.submit() }}
     </form>
 </div>
-
 </body>
 </html>
