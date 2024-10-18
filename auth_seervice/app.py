@@ -2,8 +2,9 @@ from flask import Flask, request, jsonify
 import jwt
 import datetime
 import traceback
-
+from jwt import ExpiredSignatureError, InvalidTokenError
 from sqlalchemy.testing.pickleable import User
+from werkzeug.security import generate_password_hash
 
 from models import db, FDataBase
 
@@ -36,49 +37,53 @@ def register():
 
 @app.route('/login', methods=['POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
-        user = fdb.authenticate(email, password)
-        if user:
-            token = jwt.encode({'user_id': user.user_pk, 'exp': datetime.datetime.now() + datetime.timedelta(hours=1)},
-                               app.config['SECRET_KEY'], algorithm='HS256')
-            return jsonify({'token': token}), 200
-        return jsonify({'message': 'Login failed'}), 401
-    return jsonify({'message': 'Invalid input'}), 400
+    email = request.form.get('email')
+    password = request.form.get('password')
+    remember_me = request.form.get('remember_me')
+    password = password.strip()
+
+    if not email or not password:
+        print("Недостаточно данных для авторизации")
+        return jsonify({"message": "Email и пароль обязательны"}), 400
+
+    user = fdb.authenticate(email, password)
+    if user:
+        print("Ошибка при поиске пользователя или сравнении пароля")
+        return jsonify({"message": "Неверная пара Email/пароль"}), 401
+
+    if remember_me:
+        token_life_time = 720
+    else:
+        token_life_time = 1
+
+    token = jwt.encode({
+        'user_id': user.user_pk,
+        'exp': datetime.datetime.now() + datetime.timedelta(hours=token_life_time)
+    }, app.config['SECRET_KEY'], algorithm='HS256')
+
+    return jsonify({'token': token}), 200
 
 
 @app.route('/check_auth', methods=['GET'])
 def check_auth():
-    token = request.headers.get('Authorization')
-    if not token:
-        return jsonify({'message': "Token is missing"}), 401
+    auth_header = request.headers.get('Authorization')
+
+    if not auth_header:
+        return jsonify({"message": "Токен не предоставлен"}), 401
 
     try:
-        token = token.split(' ')[1]
-        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-        return jsonify({'message': "Authenticated", 'user_id': data['user_id']}), 200
-    except jwt.ExpiredSignatureError as e:
-        return jsonify({'message': 'Token is expired'}), 401
-    except jwt.InvalidTokenError as e:
-        return jsonify({'message': 'Invalid token'}), 401
+        token = auth_header.split(' ')[1]
+        decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
 
+        if datetime.datetime.now() > datetime.datetime.fromtimestamp(decoded_token['exp']):
+            return jsonify({"message": "Токен истек"}), 401
 
-@app.route('/get_register_form', methods=['GET'])
-def get_register_form():
-    print("Пытаюсь получить форму")
-    form = RegisterForm()
-    if form:
-        print("Форма получена успешно")
-        dict_form = form.to_dict()
-        return jsonify({
-            'form': dict_form
-            # 'csrf_token': form.csrf_token.current_token
-        }), 200
-    else:
-        print("Не удалось получить форму")
-        return jsonify({'message': 'Form does not exist'}), 400
+        return jsonify({"message": "Пользователь авторизирован", "user_id": decoded_token['user_id']}), 200
+
+    except ExpiredSignatureError as e:
+        return jsonify({"message": "Токен истек"}), 401
+    except InvalidTokenError as e:
+        return jsonify({"message", "Неверный токен"}), 401
 
 
 if __name__ == "__main__":

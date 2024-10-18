@@ -20,7 +20,8 @@ class FDataBase:
             print(f"Ошибка при получении списка пользователей: {e}")
             return []
 
-    def check_unique_email(self, email):
+    @staticmethod
+    def check_unique_email(email):
         try:
             existing_user = Users.query.filter_by(email=email).first()
             if existing_user:
@@ -31,12 +32,9 @@ class FDataBase:
             print(f"Возникла ошибка при поиске {email} в БД")
             return False
 
-
     def register_new_users(self, login, password, email):
         try:
-            hashed_pass = generate_password_hash(password)
-
-            new_user = Users(login=login, password=hashed_pass, email=email)
+            new_user = Users(login=login, password=password, email=email)
             self.__db_session.add(new_user)
             self.__db_session.commit()
 
@@ -55,17 +53,22 @@ class FDataBase:
     def authenticate(email, password):
         try:
             existing_users = Users.query.filter_by(email=email).first()
+
             if not existing_users:
                 flash("Пользователь не найден", category="warning")
+                print("Ошибка при поиска email в БД")
                 return False
-            password_correct = check_password_hash(pwhash=existing_users.password, password=password)
-            if password_correct:
+
+            print(f"Введенный пароль: {password}")
+            print(f"Хэшированный пароль из БД: {existing_users.password}")
+
+            if check_password_hash(existing_users.password, password):
                 return existing_users
             else:
-                flash("Не верная пара Email - пароль", category="warning")
+                print("Хэши не совпадают")
                 return False
         except SQLAlchemyError as e:
-            print("Ошибка обращения к бд при авторизации пользователя")
+            print(f"Ошибка обращения к бд при авторизации пользователя: {e}")
             return False
 
     @staticmethod
