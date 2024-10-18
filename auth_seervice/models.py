@@ -3,7 +3,7 @@ from flask import flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, ForeignKey
 from sqlalchemy.exc import SQLAlchemyError
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 
 db = SQLAlchemy()
 
@@ -29,7 +29,7 @@ class FDataBase:
             else:
                 return True
         except SQLAlchemyError as e:
-            print(f"Возникла ошибка при поиске {email} в БД")
+            print(f"Возникла ошибка при поиске {email} в БД : {e}")
             return False
 
     def register_new_users(self, login, password, email):
@@ -58,9 +58,6 @@ class FDataBase:
                 flash("Пользователь не найден", category="warning")
                 print("Ошибка при поиска email в БД")
                 return False
-
-            print(f"Введенный пароль: {password}")
-            print(f"Хэшированный пароль из БД: {existing_users.password}")
 
             if check_password_hash(existing_users.password, password):
                 return existing_users

@@ -1,17 +1,63 @@
-/* Error: Can't find stylesheet to import.
- *   ,
- * 1 | @import 'base/base_logged_header_stylesheet'
- *   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *   '
- *   home_logged_stylesheet.sass 1:9  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @import 'base/base_logged_header_stylesheet'\a   \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   home_logged_stylesheet.sass 1:9  root stylesheet";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  list-style: none;
+  text-decoration: none;
 }
+
+body {
+  padding-top: 40px;
+}
+body header {
+  background-color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1%;
+  box-shadow: 0 5px 10px black;
+}
+body header .logo {
+  font-size: 20px;
+  font-weight: 900;
+  color: black;
+}
+body header .logo:hover {
+  transform: scale(1.2);
+}
+body header nav ul li {
+  position: relative;
+  float: left;
+}
+body header nav ul li a {
+  padding: 15px;
+  color: black;
+  font-size: 16px;
+  display: block;
+}
+body header nav ul li a:hover {
+  background: black;
+  color: white;
+}
+
+.authenticated-content {
+  padding: 20px;
+  background-color: #e8f5e9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+.authenticated-content h2 {
+  color: #2e7d32;
+}
+.authenticated-content p {
+  color: #388e3c;
+}
+
+/*# sourceMappingURL=home_logged_stylesheet.css.map */

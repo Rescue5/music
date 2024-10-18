@@ -10,6 +10,20 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'dsaisv2u3hfqc7vw7c9b7bvb97w7cb'
 
 
+def check_auth():
+    token = session.get('auth_token')
+    if not token:
+        return False
+    try:
+        response = requests.get('http://127.0.0.1:5001/check_auth', headers={'Authorization': 'Bearer ' + token})
+        if not response or response.status_code != 200:
+            return False
+    except Exception as e:
+        print(f"Ошибка при проверке токена {e}")
+        return False
+    return True
+
+
 def token_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -18,7 +32,7 @@ def token_required(f):
             flash('Пожалуйста, авторизируйтесь, чтобы получить доступ к этой странице', category='warning')
             return redirect(url_for('login'))
         try:
-            response = requests.post('http://127.0.0.1:/check_auth', headers={'Authorization': 'Bearer ' + token})
+            response = requests.post('http://127.0.0.1:5001/check_auth', headers={'Authorization': 'Bearer ' + token})
 
             if not response or response.status_code != 200:
                 flash('Пожалуйста, авторизируйтесь, чтобы получить доступ к этой странице', category="warning")
@@ -34,13 +48,8 @@ def token_required(f):
 
 @app.route('/')
 def home():
-    token = session.get('auth_token')
-    if token:
-        auth_response = requests.post('http://127.0.0.1:5001/check_auth', headers={'Authorization': token})
-        if auth_response.status_code == 200:
-            return render_template("home_logged.html")
-        else:
-            return render_template("home_unlogged.html")
+    if check_auth():
+        return render_template("home_logged.html")
     return render_template("home_unlogged.html")
 
 
@@ -53,6 +62,9 @@ def logout():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if check_auth():
+        return redirect(url_for('profile'))
+
     form = LoginForm(request.form)
     if form.validate_on_submit():
         email = form.email.data
@@ -86,17 +98,22 @@ def login():
     return render_template("login.html", form=form)
 
 
+@app.route('/profile')
+def profile():
+    return "profile"
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        login = form.login.data
+        user_login = form.login.data
         password = generate_password_hash(form.password.data.strip())
         print(f"Пароль при регистрации: {password}")
         email = form.email.data
         try:
             response = requests.post('http://127.0.0.1:5001/register', data={
-                'login': login,
+                'login': user_login,
                 'password': password,
                 'email': email
             })
