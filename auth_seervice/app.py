@@ -47,7 +47,7 @@ def login():
         return jsonify({"message": "Email и пароль обязательны"}), 400
 
     user = fdb.authenticate(email, password)
-    if user:
+    if not user:
         print("Ошибка при поиске пользователя или сравнении пароля")
         return jsonify({"message": "Неверная пара Email/пароль"}), 401
 
