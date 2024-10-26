@@ -98,9 +98,17 @@ def login():
     return render_template("login.html", form=form)
 
 
-@app.route('/profile')
-def profile():
-    return "profile"
+@app.route('/profile/<int:profile_id>')
+@token_required
+def profile(profile_id):
+    token = session.get('auth_token')
+    response = requests.get('http://127.0.0.1:5003/its_current_user', headers={'Authorization': token,
+                                                                               'profile_id': profile_id})
+    if response.status_code == 200:
+        return render_template('my_profile.html')
+    if response.status_code == 203:
+        return render_template("not_my_profile.html")
+    elif response.status_code == 504:
 
 
 @app.route('/register', methods=['GET', 'POST'])

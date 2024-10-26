@@ -7,7 +7,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
-      <excludeFolder url="file://$MODULE_DIR$/auth_seervice/my_env" />
+      <excludeFolder url="file://$MODULE_DIR$/auth_service/my_env" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.12 (Spotify_Killer)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

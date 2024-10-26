@@ -4,7 +4,8 @@ from logging.handlers import RotatingFileHandler
 
 from flask import Flask, request
 from flask_restful import Api, Resource
-from models import FDataBase, Users, UserInfo, db
+from models import FDataBase, db
+from flasgger import Swagger
 
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s)')
 
@@ -13,13 +14,13 @@ handler.setLevel(logging.INFO)
 handler.setFormatter(formatter)
 
 app = Flask(__name__)
-# app.config["SECRET_KEY"] = "daJsfohcub23rhqfcnqiu3dqobcqbbcq438fc"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:root@localhost/root'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 fdb = FDataBase(db.session)
 api = Api(app)
+swagger = Swagger(app)
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.INFO)
 
